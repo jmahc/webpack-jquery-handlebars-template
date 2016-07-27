@@ -16,6 +16,7 @@ module.exports = {
   //生成目录
   "output": ci.dist,
   env:ci.env,
+  root:'src/action',
   //资源对应的不同环境域名
   cdn:ci.urlPrefix
 };

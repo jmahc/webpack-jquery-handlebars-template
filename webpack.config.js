@@ -19,22 +19,25 @@ var setExternals= function() {
     return external;
 };
 
-var baseFileDir = path.join(process.cwd(), 'src/');
-
 var htmlPlugin=[];
 
 var getEntry = function(){
-    var basedir =baseFileDir+'action';
-    var files = glob.sync(path.join(basedir, '*.js'));
+    var webpackConfigEntry = {};
+    if(config.root.indexOf('.') !=-1 ){
+        webpackConfigEntry.bundle=path.join(__dirname, config.root);
+    }else{
+        var basedir =path.join(process.cwd(), config.root);
+        var files = glob.sync(path.join(basedir, '*.js'));
 
-    var webpackConfigEntry = {};//webpackConfig.entry || (webpackConfig.entry = {});
+        files.forEach(function(file) {
+            var relativePath = path.relative(basedir, file);
+            webpackConfigEntry[relativePath.replace(/\.js/,'').toLowerCase()] = [file];
+            generateHtml(relativePath.replace(/\.js/,'').toLowerCase() );
+        });
+    }
 
-    files.forEach(function(file) {
-        var relativePath = path.relative(basedir, file);
-        webpackConfigEntry[relativePath.replace(/\.js/,'').toLowerCase()] = [file];
-        generateHtml(relativePath.replace(/\.js/,'').toLowerCase() );
-    });
     webpackConfigEntry.dev = path.join(__dirname, 'src/utils/dev.js');
+
     return webpackConfigEntry;
 };
 
@@ -60,11 +63,8 @@ function generateHtml(htmlName){
     );
 }
 
-//extend(getEntry(),entry||{}),
-var entryList =config.projectType=='app'? extend(getEntry(),entry||{}) : extend({bundle:path.join(__dirname, 'src/index.js')},entry||{});
-
 var webpackConfig = {
-    entry: entryList,
+    entry: extend(getEntry(),entry||{}) ,
     output: {
         path:path.join(__dirname, config.output.replace('./','') ),
         filename: '[name].js',
