@@ -1,0 +1,8 @@
+{
+  "../utils/dev": {
+    "root": "",
+    "commonjs2": "",
+    "commonjs": "",
+    "amd": ""
+  }
+}
