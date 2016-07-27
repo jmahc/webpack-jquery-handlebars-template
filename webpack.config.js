@@ -24,7 +24,7 @@ var htmlPlugin=[];
 var getEntry = function(){
     var webpackConfigEntry = {};
     if(config.root.indexOf('.') !=-1 ){
-        webpackConfigEntry.bundle=path.join(__dirname, config.root);
+        webpackConfigEntry.bundle=[path.join(__dirname, config.root)];
     }else{
         var basedir =path.join(process.cwd(), config.root);
         var files = glob.sync(path.join(basedir, '*.js'));

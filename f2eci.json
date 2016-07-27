@@ -5,5 +5,5 @@
   },
   "dist": "./dist",
   "env":"dev",
-  "urlPrefix":"./src/html"
+  "urlPrefix":""
 }
