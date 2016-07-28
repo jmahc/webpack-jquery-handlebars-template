@@ -89,12 +89,21 @@ var webpackConfig = {
             },
             {
                 test: /\.(less$)$/,
-                loader: ExtractTextPlugin.extract("css!postcss!less")
+                loader:ExtractTextPlugin.extract("css!postcss!less")
                 //loader: "style-loader!css-loader!less-loader"
             },
             {
                 test: /\.css$/,
                 loader: ExtractTextPlugin.extract('css?-restructuring!postcss')
+            },
+            {
+                test: /\.css\.module/,
+                loader: ExtractTextPlugin.extract('css?-restructuring&modules&localIdentName=[local]___[hash:base64:5]!postcss')
+            },
+            {
+                test: /\.less\.module/,
+                loader: ExtractTextPlugin.extract('css?modules&localIdentName=[local]___[hash:base64:5]!postcss!less')
+
             },
             {
                 test: /\.svg$/,
@@ -151,7 +160,6 @@ var webpackConfig = {
         new webpack.ProvidePlugin({
             _: "underscore"
         }),
-        new webpack.optimize.DedupePlugin(),
         new webpack.optimize.CommonsChunkPlugin({
             names: setCommonsChuck(),
             minChunks: Infinity
@@ -177,7 +185,10 @@ if(config.env!='beta'&& config.env!='dev'){
                 'NODE_ENV': JSON.stringify('production')
             }
         })
-    )
+    );
+    webpackConfig.plugins.push(
+        new webpack.optimize.DedupePlugin()
+    );
 }
 
 module.exports = webpackConfig;
